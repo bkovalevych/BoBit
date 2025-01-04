@@ -1,0 +1,6 @@
+@BoBit.Fetcher_HostAddress = http://localhost:5117
+
+GET {{BoBit.Fetcher_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
