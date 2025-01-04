@@ -78,12 +78,13 @@ namespace BoBit.Fetcher.UnitTests.Services
             var bpi = "USD";
 
             // Act
-
-            var result = await bitcoinService.GetBitcoinPrice(bpi, default);
+            Func<Task> func = () => bitcoinService.GetBitcoinPrice(bpi, default);
 
             // Assert
 
-            Assert.Contains(result.Errors, x => x.StartsWith("Unsuccesful status"));
+            await Assert.ThrowsAsync<HttpRequestException>(func);
+            
+            
         }
     }
 }

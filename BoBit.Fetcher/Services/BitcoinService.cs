@@ -30,11 +30,7 @@ namespace BoBit.Fetcher.Services
             var path = fetchSettingsDelegate.Value.Path;
             var response = await http.GetAsync(path, ct);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                return Result<GetBitcoinPriceDto>
-                    .Error($"Unsuccesful status: {response.StatusCode}");
-            }
+            response.EnsureSuccessStatusCode();
 
             var bitcoinPriceResponse = await response.Content
                 .ReadFromJsonAsync<BitcoinPriceResponse>(ct);

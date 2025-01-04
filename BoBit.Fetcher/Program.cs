@@ -1,9 +1,11 @@
+using BoBit.Fetcher.BackgroundJobs;
 using BoBit.Fetcher.Configs;
 using BoBit.Fetcher.Data;
 using BoBit.Fetcher.Interfaces;
 using BoBit.Fetcher.Services;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +28,8 @@ if (masterConnectionString == null)
 
 builder.Services.AddSingleton<DapperContext>()
     .AddTransient<SeedDb>()
-    .AddTransient<IBitcoinService, BitcoinService>();
+    .AddSingleton<IDateProvider, DateProvider>()
+    .AddHostedService<FetcherJob>();
 
 builder.Services
     .Configure<FetchSettings>(builder.Configuration.GetSection(nameof(FetchSettings)));
@@ -34,14 +37,22 @@ builder.Services
 builder.Services.AddLogging(x => x.AddFluentMigratorConsole())
     .AddFluentMigratorCore()
     .ConfigureRunner(x => x.AddSqlServer2016()
-        .WithGlobalConnectionString(masterConnectionString)
+        .WithGlobalConnectionString(connectionString)
         .ScanIn(Assembly.GetExecutingAssembly())
         .For
         .Migrations());
 
 builder.Services.AddHealthChecks()
-    .AddSqlServer(connectionString, name:"db", tags:["db"])
+    .AddSqlServer(connectionString, name: "db", tags: ["db"])
     .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+
+builder.Services.AddHttpClient<IBitcoinService, BitcoinService>()
+    .ConfigureHttpClient((services, client) =>
+    {
+        client.BaseAddress = new Uri(
+            services.GetRequiredService<IOptions<FetchSettings>>().Value.Host);
+    })
+    .AddStandardResilienceHandler();
 
 var app = builder.Build();
 
