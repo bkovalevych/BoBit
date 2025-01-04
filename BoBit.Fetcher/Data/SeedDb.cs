@@ -2,15 +2,8 @@
 
 namespace BoBit.Fetcher.Data
 {
-    public class SeedDb
+    public class SeedDb(DapperContext _ctx)
     {
-        private readonly DapperContext _ctx;
-
-        public SeedDb(DapperContext ctx)
-        {
-            _ctx = ctx;
-        }
-
         public void CreateDatabaseIfNoExist()
         {
             using var defaultConnection = _ctx.CreateConnection();

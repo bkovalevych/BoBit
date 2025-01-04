@@ -1,4 +1,7 @@
+using BoBit.Fetcher.Configs;
 using BoBit.Fetcher.Data;
+using BoBit.Fetcher.Interfaces;
+using BoBit.Fetcher.Services;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Reflection;
@@ -13,30 +16,37 @@ if (connectionString == null)
                        "Could not find a connection string named 'DefaultConnection'.");
 }
 
-builder.Services.AddSingleton<DapperContext>();
-builder.Services.AddTransient<SeedDb>();
+var masterConnectionString = builder.Configuration.GetConnectionString("MasterConnection");
+
+if (masterConnectionString == null)
+{
+    throw new InvalidOperationException(
+                       "Could not find a connection string named 'MasterConnection'.");
+}
+
+builder.Services.AddSingleton<DapperContext>()
+    .AddTransient<SeedDb>()
+    .AddTransient<IBitcoinService, BitcoinService>();
+
+builder.Services
+    .Configure<FetchSettings>(builder.Configuration.GetSection(nameof(FetchSettings)));
+
 builder.Services.AddLogging(x => x.AddFluentMigratorConsole())
     .AddFluentMigratorCore()
     .ConfigureRunner(x => x.AddSqlServer2016()
-        .WithGlobalConnectionString(
-        builder.Configuration.GetConnectionString("MasterConnection"))
+        .WithGlobalConnectionString(masterConnectionString)
         .ScanIn(Assembly.GetExecutingAssembly())
         .For
         .Migrations());
 
-builder.Services.AddControllers();
 builder.Services.AddHealthChecks()
     .AddSqlServer(connectionString, name:"db", tags:["db"])
     .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+
 var app = builder.Build();
 
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 app.MapHealthChecks("/health");
-
 app.MigrateDb();
 app.Run();
