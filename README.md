@@ -8,4 +8,6 @@ This project is a microservice-based application that consists of three main com
 The application uses **Docker Compose** to orchestrate the services.
 
 Run the following command to build and start all services:
+```
 docker-compose up --build
+```
