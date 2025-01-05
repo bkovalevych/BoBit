@@ -1,0 +1,6 @@
+@BoBit.Api_HostAddress = http://localhost:5210
+
+GET {{BoBit.Api_HostAddress}}/BitcoinPrices/
+Accept: application/json
+
+###

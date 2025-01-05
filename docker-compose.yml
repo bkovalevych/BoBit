@@ -1,7 +1,15 @@
 services:
   mssql-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: mssql-db  
+    container_name: mssql-db
+  bobit-api:
+    image: ${DOCKER_REGISTRY-}bobitapi
+    container_name: bobit-api
+    build:
+      context: .
+      dockerfile: Bobit.Api/Dockerfile
+    depends_on:
+      - mssql-db
   bobit-fetcher:
     image: ${DOCKER_REGISTRY-}bobitfetcher
     container_name: bobit-fetcher

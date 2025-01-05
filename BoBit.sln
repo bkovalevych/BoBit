@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8B364900
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoBit.Fetcher.IntegrationTests", "tests\BoBit.Fetcher.IntegrationTests\BoBit.Fetcher.IntegrationTests.csproj", "{11EB3C39-25F7-4007-B66C-D3A681419BA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoBit.Api", "BoBit.Api\BoBit.Api.csproj", "{D03ABDA2-2BDB-4B8A-8C1F-6D9A4FE1D71E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{11EB3C39-25F7-4007-B66C-D3A681419BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11EB3C39-25F7-4007-B66C-D3A681419BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11EB3C39-25F7-4007-B66C-D3A681419BA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D03ABDA2-2BDB-4B8A-8C1F-6D9A4FE1D71E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D03ABDA2-2BDB-4B8A-8C1F-6D9A4FE1D71E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D03ABDA2-2BDB-4B8A-8C1F-6D9A4FE1D71E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D03ABDA2-2BDB-4B8A-8C1F-6D9A4FE1D71E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
