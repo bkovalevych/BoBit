@@ -1,0 +1,7 @@
+<div>
+    <p>Crypto: {{crypto}}</p>
+    <p>Fiat: {{fiat}}</p>
+    <p>Max price: {{maxPrice | currency: 'USD'}}</p>
+    <p>Avg price: {{avgPrice | currency: 'USD'}}</p>
+</div>
+<div echarts [options]="options" [merge]="chartMerge" (chartInit)="onChartInit($event)" style="height: 400px;"></div>
