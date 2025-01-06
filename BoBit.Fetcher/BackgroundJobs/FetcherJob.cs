@@ -23,8 +23,8 @@ namespace BoBit.Fetcher.BackgroundJobs
 
             while (!stoppingToken.IsCancellationRequested) 
             {
-                await Request(timeDelay, stoppingToken);
                 await Task.Delay(timeDelay, stoppingToken);
+                await Request(timeDelay, stoppingToken);
             }
         }
 

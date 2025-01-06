@@ -29,12 +29,15 @@ if (masterConnectionString == null)
 builder.Services.AddSingleton<DapperContext>()
     .AddTransient<SeedDb>()
     .AddSingleton<IDateProvider, DateProvider>()
-    .AddHostedService<FetcherJob>();
+    .AddHostedService<FetcherJob>()
+    .AddHostedService<DbMigrationJob>();
 
 builder.Services
     .Configure<FetchSettings>(builder.Configuration.GetSection(nameof(FetchSettings)));
 
-builder.Services.AddLogging(x => x.AddFluentMigratorConsole())
+builder.Services.AddLogging(x => x.ClearProviders()
+    .AddConsole()
+    .AddFluentMigratorConsole())
     .AddFluentMigratorCore()
     .ConfigureRunner(x => x.AddSqlServer2016()
         .WithGlobalConnectionString(connectionString)
@@ -59,5 +62,4 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.MapHealthChecks("/health");
-app.MigrateDb();
 app.Run();
