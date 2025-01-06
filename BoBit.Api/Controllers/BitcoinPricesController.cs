@@ -13,6 +13,7 @@ namespace BoBit.Api.Controllers
         ILogger<BitcoinPricesController> logger) : ControllerBase
     {
         [HttpGet]
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public async Task<ActionResult<BitcoinPricesResponse>> Get([FromQuery]DateTimeOffset? from, [FromQuery]DateTimeOffset? to)
         {
             if (from == null) 
@@ -56,7 +57,7 @@ namespace BoBit.Api.Controllers
             if (first == null) 
             {
                 return Ok(new BitcoinPricesResponse(0m, 0m, from.Value, to.Value, string.Empty, string.Empty,
-                    []));
+                    [], []));
             }
 
             var cryptoCurrency = first.CryptoCurrency?.Trim();
@@ -65,10 +66,10 @@ namespace BoBit.Api.Controllers
             var max = response.Max(x => x.Price);
             var avg = response.Average(x => x.Price);
 
-            var series = response.Select(x => new BitcoinPriceDto(x.Timestamp, x.Price));
-
-
-            return Ok(new BitcoinPricesResponse(max, avg, from.Value, to.Value, cryptoCurrency, fiatCurrency, series));
+            var labels = response.Select(x => x.Timestamp);
+            var data = response.Select(x => x.Price);
+          
+            return Ok(new BitcoinPricesResponse(max, avg, from.Value, to.Value, cryptoCurrency, fiatCurrency, labels, data));
         }
     }
 }

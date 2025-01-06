@@ -7,7 +7,6 @@
         DateTimeOffset To,
         string? CryptoCurrency,
         string? FiatCurrency,
-        IEnumerable<BitcoinPriceDto> Series);
-
-    public record BitcoinPriceDto(DateTimeOffset Name, decimal Value);
+        IEnumerable<DateTimeOffset> Labels,
+        IEnumerable<decimal> Data);
 }
