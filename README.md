@@ -11,3 +11,13 @@ Run the following command to build and start all services:
 ```
 docker-compose up --build
 ```
+Containers:
+1. mssql port:1433
+2. bo-bit-site port:4200
+3. bobit-fetcher port:5117
+4. bobit-api port:5210
+
+e2e tests
+```
+npm run e2e
+```
